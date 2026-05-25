@@ -2,6 +2,13 @@
 
 All notable changes are documented here. Entries follow [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses [Changesets](https://github.com/changesets/changesets) to generate releases.
 
+## 0.4.0 — web search + fetch (Tavily + Serper + Cerebras)
+
+- `vike web search "<query>"` — web search with Tavily-first (LLM-tuned snippets + relevance scores) and Serper Google fallback.
+- `vike web fetch <url> [--ask "<question>"]` — fetch URL via Tavily extract, optionally answer a question using Cerebras Llama 3.3 70B (~10x cheaper than Gemini Flash).
+- 3 new SKILL.md playbooks: `vike-web-search`, `vike-web-fetch`, `vike-web-research` (multi-step composite).
+- Total: 28 SKILL.md skills (was 25), 24 MCP tools (was 22).
+
 ## 0.3.0 — wallet labels + holders + DeFi positions
 
 - `vike labels <address>` — multi-source label cascade for a wallet (Arkham + OLI + Blockscout + Dune + MEW darklist + Etherscan + heuristic classifier with per-source attribution + consensus view). **Headline differentiator: every label shows its evidence chain.**

@@ -1,6 +1,6 @@
 {
   "name": "vike-cli",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "AI-agent CLI for vike.io on-chain analytics, perps, options, and prediction markets across 11 chains",
   "type": "module",
   "main": "src/index.js",
