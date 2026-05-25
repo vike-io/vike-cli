@@ -59,6 +59,32 @@ export function registerToken(program) {
     });
 
   cmd
+    .command('screener')
+    .description('Token discovery filter — rank tokens by volume / inflow / holders / smart-money inflow')
+    .option('--chain <c>', 'ethereum | bsc | base', 'ethereum')
+    .option('--window <w>', '24h | 7d | 30d | 90d', '24h')
+    .option('--sort <s>', 'volume | net_inflow | holders | smart_inflow', 'volume')
+    .option('--limit <n>', 'Max tokens (max 100)', '20')
+    .option('--min-volume <usd>', 'Minimum window volume USD', '0')
+    .option('--min-holders <n>', 'Minimum unique holders', '0')
+    .option('--smart-money-only', 'Restrict flows to smart-money cohort')
+    .option('--json', 'Emit JSON')
+    .action(async (opts) => {
+      try {
+        const r = await callTool('token_screener', {
+          chain: opts.chain,
+          window: opts.window,
+          sort: opts.sort,
+          limit: parseInt10(opts.limit, 20),
+          min_volume_usd: parseFloat(opts.minVolume) || 0,
+          min_holders: parseInt10(opts.minHolders, 0),
+          smart_money_only: Boolean(opts.smartMoneyOnly),
+        });
+        emit(r, opts);
+      } catch (err) { emitError(err, opts); }
+    });
+
+  cmd
     .command('holders <token_address>')
     .description('Top holders of a token by cumulative net inflow USD')
     .option('--chain <chain>', 'ethereum | bsc | base', 'ethereum')

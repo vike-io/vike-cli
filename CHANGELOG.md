@@ -2,6 +2,17 @@
 
 All notable changes are documented here. Entries follow [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## 0.7.0 — 5 new commands (transactions, compare, trace, batch, screener)
+
+- **`vike wallet transactions <address>`** (alias `txs`) — raw per-wallet transfer list with `--direction in|out|all`, `--days`, `--min-usd`, `--token` filters.
+- **`vike wallet compare <a> <b>`** — diff two wallets (shared counterparties + shared tokens within a window).
+- **`vike wallet trace <address>`** — counterparty graph traversal, depth 1-5, width 1-10, with min-USD threshold.
+- **`vike wallet batch <addr1> <addr2> ...`** — bulk label + 30d summary lookup for up to 100 addresses, preserves input order.
+- **`vike token screener`** — token discovery filter ranked by volume / net inflow / holders / smart-money inflow.
+- 5 new SKILL.md playbooks: `vike-wallet-transactions`, `vike-wallet-compare`, `vike-wallet-trace`, `vike-wallet-batch`, `vike-token-screener`.
+
+Total: 38 skills (was 33), 34 MCP tools (was 29).
+
 ## 0.6.0 — infra hardening + observability + skill eval harness
 
 Mostly internal-quality improvements; no new commands. Backbone for everything that follows.
