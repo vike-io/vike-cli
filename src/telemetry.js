@@ -15,7 +15,7 @@
 // endpoint. Keeping the API shape stable now so we can flip the switch
 // later without a refactor.
 
-import { existsSync, mkdirSync, readFileSync, writeFileSync, statSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { homedir } from 'node:os';
 import { join } from 'node:path';
 import { randomUUID } from 'node:crypto';

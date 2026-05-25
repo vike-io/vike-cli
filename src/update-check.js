@@ -11,8 +11,7 @@
 import { spawn } from 'node:child_process';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { homedir } from 'node:os';
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { join } from 'node:path';
 
 const CONFIG_DIR = join(homedir(), '.vike');
 const CHECK_FILE = join(CONFIG_DIR, 'update-check.json');
@@ -31,13 +30,6 @@ function suppressed() {
 function readCache() {
   if (!existsSync(CHECK_FILE)) return null;
   try { return JSON.parse(readFileSync(CHECK_FILE, 'utf8')); } catch { return null; }
-}
-
-function writeCache(latest) {
-  try {
-    if (!existsSync(CONFIG_DIR)) mkdirSync(CONFIG_DIR, { recursive: true, mode: 0o700 });
-    writeFileSync(CHECK_FILE, JSON.stringify({ latest, checkedAt: Date.now() }, null, 2));
-  } catch { /* ignore */ }
 }
 
 function cmpSemver(a, b) {
@@ -73,7 +65,6 @@ export function scheduleUpdateCheck() {
   const cache = readCache();
   if (cache && Date.now() - (cache.checkedAt || 0) < CHECK_INTERVAL_MS) return;
 
-  const __filename = fileURLToPath(import.meta.url);
   // Inline child script — no separate file needed, no dependency on
   // package layout, survives `npm install -g` symlinking.
   const code = `
