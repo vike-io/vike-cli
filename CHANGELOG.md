@@ -2,6 +2,13 @@
 
 All notable changes are documented here. Entries follow [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## 0.7.1 — eval harness v2 + help tweaks + SQL fix
+
+- **Eval schema upgraded** (`evals/questions.yaml`): multi-command list, per-skill tag, multi-step flag, word-boundary forbidden matching. Per-skill scoring breakdown + single-vs-multi-step split in the runner output.
+- **10 new multi-step questions** exercising composite playbook skills (smart-money-discovery, wallet-portfolio, polymarket-screener, perp-screener, hl-trader-profile, alerts-setup, etc.) — 32 questions total.
+- **Help discoverability tweaks**: `wallet counterparties --limit` and `wallet balances --min-usd` descriptions improved (eval surfaced both as commonly-missed flags).
+- **Backend bug fix shipped (server-side)**: `wallet_transactions` returned 0 rows due to ClickHouse SELECT-alias shadowing — fixed in monorepo, deployed to prod.
+
 ## 0.7.0 — 5 new commands (transactions, compare, trace, batch, screener)
 
 - **`vike wallet transactions <address>`** (alias `txs`) — raw per-wallet transfer list with `--direction in|out|all`, `--days`, `--min-usd`, `--token` filters.

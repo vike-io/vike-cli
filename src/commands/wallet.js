@@ -104,7 +104,7 @@ export function registerWallet(program) {
     .description('Top trading partners of a wallet by combined transfer volume')
     .option('--chain <c>', 'ethereum | bsc | base', 'ethereum')
     .option('--window <w>', '24h | 7d | 30d | 90d | 180d | all', '30d')
-    .option('--limit <n>', 'Max counterparties (max 50)', '10')
+    .option('--limit <n>', 'Max counterparties returned (default 10, max 50)', '10')
     .option('--json', 'Emit JSON')
     .action(async (address, opts) => {
       try {
@@ -139,7 +139,7 @@ export function registerWallet(program) {
     .command('balances <address>')
     .description('Current ERC-20 holdings across major EVM chains')
     .option('--chains <list>', 'Comma-separated chains (eth,bsc,base,arbitrum,polygon,optimism)')
-    .option('--min-usd <n>', 'Filter dust below this USD value', '1')
+    .option('--min-usd <n>', 'Filter dust below this USD value (default $1; recommend $100+ for noisy wallets)', '1')
     .option('--json', 'Emit JSON')
     .action(async (address, opts) => {
       try {
