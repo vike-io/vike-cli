@@ -1,0 +1,41 @@
+---
+name: vike-wallet-ens
+description: Reverse ENS lookup — turn a 0x address into a human-readable name like `vitalik.eth`. Cheap, single API call. Use whenever you have an address and want to display a friendlier identifier alongside it.
+allowed-tools: Bash(vike:*)
+---
+
+# vike-wallet-ens
+
+## Command
+
+```bash
+vike wallet ens <address> [--json]
+```
+
+## Example
+
+```bash
+vike wallet ens 0xd8da6bf26964af9d7eed9e03e53415d37aa96045
+# → { "address": "0xd8da...", "ens": "vitalik.eth" }
+
+vike wallet ens 0x28c6c06298d514db089934071355e5743bf21d60
+# → { "address": "0x28c6...", "ens": null }      (most exchange wallets have no ENS)
+```
+
+## When to use
+
+- Right after any tool returns a wallet address — show ENS as a secondary label
+- When the user pastes an address and asks "who is this"
+- When you're about to display a leaderboard with addresses — enrich each row with ENS if available
+
+## Anti-patterns
+
+- Don't replace the address with the ENS name in tool output — show BOTH. The address is canonical; ENS is a display layer that can change ownership.
+- Don't ENS-lookup hundreds of addresses in a leaderboard at once — credits add up. Usually ENS-lookup only the top 5-10 rows the user is likely to act on.
+- A `null` response is normal, not an error. Most wallets don't have ENS.
+
+## Pairs well with
+
+- `vike labels <addr>` — combine ENS + labels for the fullest identity view
+- `vike wallet summary <addr>` — ENS + activity profile
+- `vike funds` — pair with ENS lookups on the top entries for richer display

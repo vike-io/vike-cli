@@ -1,0 +1,48 @@
+---
+name: vike-wallet-counterparties
+description: Find the top trading partners of a wallet — who it sent to and received from, ranked by combined USD volume. Use when the user asks "who does this wallet trade with" / "main counterparties of X" / "find connections between wallets".
+allowed-tools: Bash(vike:*)
+---
+
+# vike-wallet-counterparties
+
+## Command
+
+```bash
+vike wallet counterparties <address>
+  [--chain ethereum|bsc|base]
+  [--window 24h|7d|30d|90d|180d|all]
+  [--limit N]   (max 50)
+  [--json]
+```
+
+## Example
+
+```bash
+vike wallet counterparties 0xd8da6bf26964af9d7eed9e03e53415d37aa96045 --window 30d
+```
+
+## Output columns
+
+`wallet`, `total_volume_usd`, `sent_usd`, `received_usd`, `tx_count`, `first_seen`, `last_seen`, `entity`, `wallet_type`
+
+## Reading
+
+- **Sent + Received roughly equal** = active trading partner (DEX router, MM, regular counterparty)
+- **Sent >> Received** = wallet pays this counterparty (deposit address, contract call)
+- **Received >> Sent** = wallet receives from this counterparty (funding source, employer, airdrop)
+- `entity = "Binance"` (CEX) on the top row = the wallet deposits to / withdraws from that exchange
+- `wallet_type = "dex"` = router contracts (Uniswap, 1inch, Curve routers) — typical for active traders
+- Unlabeled top counterparty with high volume = potentially related wallet worth investigating with `vike labels`
+
+## Anti-patterns
+
+- Don't claim two wallets are "controlled by the same person" from counterparties alone — many people deposit to the same Binance address. Pair with `vike-wallet-clustering` (deferred) or manual investigation.
+- Window matters: a 24h view captures recent activity but misses long-standing relationships. Default to 30d, expand to `all` for full history.
+- For tokens with high churn (memecoins), top counterparties will be dominated by Uniswap routers; filter mentally for non-DEX rows for human counterparties.
+
+## Pairs well with
+
+- `vike labels <addr>` — drill into any interesting counterparty's full label cascade
+- `vike wallet summary <addr>` — total activity of any counterparty
+- `vike wallet balances <addr>` — see what tokens that counterparty currently holds

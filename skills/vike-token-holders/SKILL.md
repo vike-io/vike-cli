@@ -1,0 +1,45 @@
+---
+name: vike-token-holders
+description: Top holders of an ERC-20 token by cumulative net inflow USD, with known labels. Use when the user asks "top holders of X" / "who holds the most of token Y" / "is whale Z holding token A".
+allowed-tools: Bash(vike:*)
+---
+
+# vike-token-holders
+
+## Command
+
+```bash
+vike token holders <token_address> [--chain ethereum|bsc|base] [--limit N] [--json]
+```
+
+## Examples
+
+```bash
+# Resolve symbol first if needed:
+vike token search PEPE --chain ethereum --limit 1 --json
+# Then holders:
+vike token holders 0x6982508145454ce325ddbe47a25d4ec3d2311933 --limit 20
+```
+
+## Output columns
+
+`wallet`, `net_flow_usd` (lifetime), `volume_usd` (lifetime), `tx_count`, `first_seen`, `last_active`, `entity`, `wallet_type`
+
+## Reading
+
+- **Sorted descending by `net_flow_usd`** — the biggest accumulators are at the top
+- A row with `entity = "Binance"` is a CEX hot/cold wallet — these aggregate millions of retail holders, not single discretionary positions
+- `first_seen` earlier than the token's launch month = wallet was active before this token existed; probably an aggregator
+- Two wallets with similar `net_flow_usd` but very different `tx_count`: low-tx = single buy-and-hold; high-tx = active trader
+
+## Anti-patterns
+
+- "Top holders" here means cumulative net inflow over all time — NOT current on-chain balance (which would require querying the contract directly). A wallet that bought $10M and sold $9M shows `net_flow_usd = $1M`, even if current balance is zero. **Always call this out** when reporting top holders.
+- Don't list `tx_count = 1` whales as "smart money" without context — could be an airdrop receiver who never sold.
+- For BSC tokens, pass `--chain bsc` explicitly; default is ethereum.
+
+## Pairs well with
+
+- `vike labels <addr>` — drill into any holder's full label cascade
+- `vike token transfers <addr>` — see who's currently buying/selling in last 24h
+- `vike wallet summary <addr>` — full activity profile of any holder

@@ -1,0 +1,70 @@
+{
+  "name": "vike-cli",
+  "version": "0.5.0",
+  "description": "AI-agent CLI for vike.io on-chain analytics, perps, options, and prediction markets across 11 chains",
+  "type": "module",
+  "main": "src/index.js",
+  "bin": {
+    "vike": "./src/index.js"
+  },
+  "files": [
+    "src/**/*.js",
+    "scripts/postinstall.js",
+    "skills/**",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "postinstall": "node scripts/postinstall.js",
+    "start": "node src/index.js",
+    "test": "vitest run --passWithNoTests",
+    "test:watch": "vitest",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "changeset": "changeset",
+    "changeset:version": "changeset version",
+    "changeset:publish": "changeset publish",
+    "sync-schema": "node scripts/sync-schema.js"
+  },
+  "keywords": [
+    "vike",
+    "crypto",
+    "blockchain",
+    "mcp",
+    "ai-agent",
+    "claude-code",
+    "openclaw",
+    "smart-money",
+    "onchain",
+    "perps",
+    "hyperliquid",
+    "options",
+    "deribit",
+    "polymarket",
+    "prediction-markets",
+    "defi",
+    "ethereum",
+    "bsc",
+    "base"
+  ],
+  "author": "vike.io",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vike-io/vike-cli.git"
+  },
+  "bugs": {
+    "url": "https://github.com/vike-io/vike-cli/issues"
+  },
+  "homepage": "https://vike.io",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "dependencies": {
+    "commander": "^12.1.0"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.27.9",
+    "eslint": "^9.15.0",
+    "vitest": "^2.1.5"
+  }
+}

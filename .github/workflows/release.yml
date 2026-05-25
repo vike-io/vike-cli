@@ -1,0 +1,29 @@
+name: Release
+
+# Only fire on explicit version tags (e.g. `git tag v0.5.0 && git push --tags`).
+# Day-to-day npm publishes happen manually with `npm publish`; this workflow is
+# the formal escape hatch when we want CI to do it for us.
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+  id-token: write
+
+jobs:
+  release:
+    if: github.repository == 'vike-io/vike-cli'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          registry-url: https://registry.npmjs.org
+      - run: npm ci
+      - name: Publish to npm
+        run: npm publish --access public --provenance=false
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
