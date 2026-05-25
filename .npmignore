@@ -1,0 +1,13 @@
+.github/
+.changeset/
+.vscode/
+.idea/
+src/__tests__/
+evals/
+eslint.config.js
+vitest.config.js
+CONTRIBUTING.md
+AGENTS.md
+TODO.md
+*.test.js
+*.spec.js
