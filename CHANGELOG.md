@@ -2,6 +2,15 @@
 
 All notable changes are documented here. Entries follow [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses [Changesets](https://github.com/changesets/changesets) to generate releases.
 
+## 0.3.0 — wallet labels + holders + DeFi positions
+
+- `vike labels <address>` — multi-source label cascade for a wallet (Arkham + OLI + Blockscout + Dune + MEW darklist + Etherscan + heuristic classifier with per-source attribution + consensus view). **Headline differentiator: every label shows its evidence chain.**
+- `vike funds [--kind funds|cex|mm|treasury]` — top labeled fund / market-maker / treasury / CEX wallets ranked by recent net inflow USD.
+- `vike token holders <token_address>` — top ERC-20 holders by cumulative net inflow USD with labels joined in.
+- `vike defi <address>` — DeFi protocol positions across all DeBank-supported chains (Aave, Uniswap LP, Curve, Pendle, etc.) with per-protocol net/asset/debt USD.
+- 4 new SKILL.md playbooks: `vike-wallet-label-provenance`, `vike-fund-holdings`, `vike-token-holders`, `vike-defi-positions`.
+- Total: 25 SKILL.md skills (was 21), 22 MCP tools (was 18).
+
 ## 0.2.0 — Polymarket suite
 
 - New command group `vike polymarket` (alias: `pm`) with 4 subcommands:

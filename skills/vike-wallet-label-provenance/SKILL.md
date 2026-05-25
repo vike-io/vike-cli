@@ -1,0 +1,65 @@
+---
+name: vike-wallet-label-provenance
+description: Multi-source label cascade for any ETH wallet — shows what every label provider (Arkham, OLI, Blockscout, Dune, MEW darklist, Etherscan, heuristic classifier) says about an address, with consensus entity/type and per-source attribution. Use when the user asks "who is this address" / "what do you know about this wallet" / "is this address labeled".
+allowed-tools: Bash(vike:*)
+---
+
+# vike-wallet-label-provenance
+
+The headline differentiator: we don't just show a label, we show **which sources agree** and how confident the consensus is.
+
+## Command
+
+```bash
+vike labels <address> [--json]
+```
+
+## Example
+
+```bash
+vike labels 0x28C6c06298d514Db089934071355E5743bf21d60     # Binance Hot Wallet 14
+```
+
+## Output shape
+
+```json
+{
+  "address": "0x...",
+  "found": true,
+  "consensus": {
+    "entity": "Binance",
+    "wallet_type": "cex",
+    "cex_product": "spot",
+    "user_subtype": "",
+    "risk_flag": "",
+    "confidence": "High"
+  },
+  "sources": [
+    { "source": "arkham",         "label": "Binance 14", "entity": "Binance", "category": "CEX" },
+    { "source": "oli",            "label": "Binance Hot Wallet" },
+    { "source": "blockscout",     "label": "Binance: Hot Wallet 14" },
+    { "source": "etherscan",      "label": "Binance" },
+    { "source": "heuristic:cold_t1", "confidence": 0.94 }
+  ],
+  "source_count": 5
+}
+```
+
+## Reading
+
+- **5+ sources agree** → very high confidence; ship the label without caveats
+- **2-3 sources agree on same entity** → high confidence
+- **Only 1 source + heuristic** → moderate; mention "labeled by X"
+- **0 sources, only heuristic** → low; mention "predicted by heuristic"
+- **0 sources, no heuristic** → genuinely unknown wallet (most retail addresses)
+
+## Anti-patterns
+
+- Don't quote the `arkham_category` field as "the category" — it's Arkham-specific; the `consensus.wallet_type` is the unified field.
+- A `risk_flag` of `scam` / `sanctioned` / `phishing` is high-stakes — always mention it explicitly, never bury it.
+
+## Pairs well with
+
+- `vike wallet summary <addr>` — for the flow metrics of the labeled wallet
+- `vike funds` — find all known fund wallets and their recent flows
+- `vike defi <addr>` — see what protocols this entity is using

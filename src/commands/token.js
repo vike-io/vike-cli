@@ -57,4 +57,21 @@ export function registerToken(program) {
         emit(r, opts);
       } catch (err) { emitError(err, opts); }
     });
+
+  cmd
+    .command('holders <token_address>')
+    .description('Top holders of a token by cumulative net inflow USD')
+    .option('--chain <chain>', 'ethereum | bsc | base', 'ethereum')
+    .option('--limit <n>', 'Max holders (max 50)', '10')
+    .option('--json', 'Emit JSON')
+    .action(async (tokenAddress, opts) => {
+      try {
+        const r = await callTool('token_holders', {
+          token_address: tokenAddress,
+          chain: opts.chain,
+          limit: parseInt10(opts.limit, 10),
+        });
+        emit(r, opts);
+      } catch (err) { emitError(err, opts); }
+    });
 }

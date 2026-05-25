@@ -6,6 +6,7 @@ import { registerPerp } from './commands/perp.js';
 import { registerOptions } from './commands/options.js';
 import { registerAlerts } from './commands/alerts.js';
 import { registerPolymarket } from './commands/polymarket.js';
+import { registerLabels } from './commands/labels.js';
 import { registerInit } from './commands/init.js';
 import { registerDoctor } from './commands/doctor.js';
 import { registerSchema } from './commands/schema.js';
@@ -30,6 +31,7 @@ registerPerp(program);
 registerOptions(program);
 registerAlerts(program);
 registerPolymarket(program);
+registerLabels(program);
 
 program.parseAsync(process.argv).catch((err) => {
   console.error(`vike: ${err.message ?? err}`);
