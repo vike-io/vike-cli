@@ -7,7 +7,7 @@ if (process.env.CI || process.env.npm_config_loglevel === 'silent') {
 
 const lines = [
   '',
-  '  vike-cli installed.',
+  '  @vike-io/cli installed.',
   '',
   '  Next steps:',
   '    vike init                  — interactive setup',

@@ -1,6 +1,8 @@
-# vike-cli
+# @vike-io/cli
 
-[![npm version](https://img.shields.io/npm/v/vike-cli.svg)](https://www.npmjs.com/package/vike-cli)
+> Repo + package: `@vike-io/cli` (npm) · `vike-io/vike-cli` (GitHub) · binary: `vike`
+
+[![npm version](https://img.shields.io/npm/v/@vike-io/cli.svg)](https://www.npmjs.com/package/@vike-io/cli)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Node](https://img.shields.io/badge/node-%3E%3D20-brightgreen.svg)](https://nodejs.org)
 
@@ -9,7 +11,7 @@
 ## Install
 
 ```bash
-npm install -g vike-cli
+npm install -g @vike-io/cli
 ```
 
 ## Quick start
@@ -56,7 +58,7 @@ Skill entry points:
 - `vike-token-research`, `vike-smart-money-discovery`, `vike-perp-funding-arb`, `vike-perp-screener`, `vike-hl-top-traders`, `vike-hl-trader-profile`, `vike-cross-venue-perps`, `vike-options-flow`, `vike-alerts-setup` — task playbooks
 - Per-tool skills for each command
 
-In Claude Code, the bundled skills are auto-discovered after `npm install -g vike-cli`. In other harnesses, point the agent at the `skills/` folder of this package.
+In Claude Code, the bundled skills are auto-discovered after `npm install -g @vike-io/cli`. In other harnesses, point the agent at the `skills/` folder of this package.
 
 ## Auth
 

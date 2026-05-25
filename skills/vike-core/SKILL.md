@@ -9,7 +9,7 @@ metadata:
     primaryEnv: VIKE_API_KEY
     install:
       - kind: node
-        package: vike-cli
+        package: "@vike-io/cli"
         bins: [vike]
 allowed-tools: Bash(vike:*)
 ---
@@ -21,7 +21,7 @@ Install + auth + conventions. Read this first; every other `vike-*` skill assume
 ## Install
 
 ```bash
-npm install -g vike-cli
+npm install -g @vike-io/cli
 ```
 
 ## Authenticate (one of these)
