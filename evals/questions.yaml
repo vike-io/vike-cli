@@ -1,0 +1,93 @@
+# Eval questions. Each question is a natural-language user request +
+# the expected `vike` command + flags + (optionally) forbidden fragments.
+#
+# Forbidden fragments are common hallucinations: invented flags, wrong
+# commands, made-up subcommands. If the model output contains any of
+# these, the answer scores 0 (no partial credit for hallucinations).
+#
+# Add 1+ question per command. Better: add composite-skill questions
+# that span multiple tools to exercise the multi-call playbook skills.
+
+questions:
+  - q: "Find the address of the PEPE token on Ethereum."
+    expected_command: "vike token search"
+    expected_flags: ["--chain"]
+    forbidden:
+      - "--network"   # not our flag
+      - "vike search token"  # wrong order
+      - "--token"     # only used downstream, not by search
+
+  - q: "Show me the top 10 holders of USDC by net inflow."
+    expected_command: "vike token holders"
+    expected_flags: ["--limit"]
+    forbidden:
+      - "--top"      # not our flag
+
+  - q: "What's vitalik.eth's portfolio across DeFi protocols?"
+    expected_command: "vike defi"
+    forbidden:
+      - "--protocols"  # we infer all
+
+  - q: "Top Hyperliquid traders by PnL in the last 30 days, win rate above 75%."
+    expected_command: "vike perp top-traders"
+    expected_flags: ["--window", "--sort", "--min-win-rate"]
+    forbidden:
+      - "--winrate"   # spelled wrong
+
+  - q: "Find cross-venue funding-rate arb opportunities right now."
+    expected_command: "vike perp funding"
+    forbidden:
+      - "--arb"       # default behavior, no flag needed
+
+  - q: "Who are the main trading counterparties of 0xd8da6bf26964af9d7eed9e03e53415d37aa96045?"
+    expected_command: "vike wallet counterparties"
+    expected_flags: ["--limit"]
+    forbidden:
+      - "--depth"     # that's the trace tool we haven't built
+
+  - q: "Show me current ERC-20 token balances for a wallet across all major chains."
+    expected_command: "vike wallet balances"
+    expected_flags: ["--chains", "--min-usd"]
+    forbidden:
+      - "--all-chains"  # invented
+
+  - q: "Multi-source label cascade for 0x28C6c06298d514Db089934071355E5743bf21d60."
+    expected_command: "vike labels"
+    forbidden:
+      - "vike wallet labels"   # wrong namespacing
+      - "--source"             # not how it works
+
+  - q: "Trending Polymarket crypto markets, top 10."
+    expected_command: "vike polymarket markets"
+    expected_flags: ["--category", "--limit"]
+    forbidden:
+      - "vike pm crypto"   # not a thing
+
+  - q: "Detect Polymarket smart-money mispricings in the last 24h."
+    expected_command: "vike polymarket smart-money"
+    expected_flags: ["--mode", "--hours"]
+    forbidden:
+      - "--mispricings"   # value of --mode, not a flag
+
+  - q: "Reverse-ENS lookup for 0xd8da6bf26964af9d7eed9e03e53415d37aa96045."
+    expected_command: "vike wallet ens"
+    forbidden:
+      - "vike ens"   # wrong namespace
+
+  - q: "Register a webhook for alert delivery at https://my.app/hook with secret abc12345abc12345."
+    expected_command: "vike alerts register-webhook"
+    expected_flags: ["--secret"]
+    forbidden:
+      - "--url"   # url is positional, not a flag
+      - "--hmac"  # we just say --secret
+
+  - q: "Search the web for Hyperliquid funding rate news."
+    expected_command: "vike web search"
+    forbidden:
+      - "vike search web"   # wrong order
+
+  - q: "Daily PnL series for wallet X over the last 60 days."
+    expected_command: "vike wallet pnl-history"
+    expected_flags: ["--days"]
+    forbidden:
+      - "--period"  # not our flag

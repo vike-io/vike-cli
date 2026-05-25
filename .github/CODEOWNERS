@@ -1,0 +1,15 @@
+# CODEOWNERS — automatic PR reviewers.
+#
+# Currently single-maintainer (@vikeio). When the team grows, split this
+# by directory so security-sensitive paths get extra review.
+
+* @vikeio
+
+# Security-sensitive paths — always require explicit review even if the
+# rest of the file is auto-approved by another path rule in the future.
+/src/auth.js              @vikeio
+/src/mcp-client.js        @vikeio
+/src/telemetry.js         @vikeio
+/.github/workflows/       @vikeio
+/scripts/                 @vikeio
+/SECURITY.md              @vikeio

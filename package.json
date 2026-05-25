@@ -3,7 +3,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "AI-agent CLI for vike.io on-chain analytics, perps, options, and prediction markets across 11 chains",
   "type": "module",
   "main": "src/index.js",
@@ -19,8 +19,10 @@
   "scripts": {
     "postinstall": "node scripts/postinstall.js",
     "start": "node src/index.js",
+    "pretest": "node scripts/check-changeset.js",
     "test": "vitest run --passWithNoTests",
     "test:watch": "vitest",
+    "test:e2e": "vitest run --config vitest.e2e.config.js",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "changeset": "changeset",

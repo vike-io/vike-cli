@@ -20,3 +20,7 @@ jobs:
       - run: npm ci
       - run: npm run lint --if-present
       - run: npm test --if-present
+      # Lightweight security audit — fails only on high/critical.
+      # Low/medium are reported via the weekly Dependabot PRs.
+      - run: npm audit --audit-level=high
+        continue-on-error: false

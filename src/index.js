@@ -16,13 +16,27 @@ import { registerDoctor } from './commands/doctor.js';
 import { registerSchema } from './commands/schema.js';
 import { registerLogin, registerLogout } from './commands/auth.js';
 import { readPackageVersion } from './util.js';
+import {
+  getUpdateNotification,
+  getUpgradeNotice,
+  scheduleUpdateCheck,
+} from './update-check.js';
+
+const version = readPackageVersion();
+
+// Print at-most-once notifications: upgrade-since-last-run, and update-available
+// (the latter from the previous background check). Cheap, sync, exits if quiet.
+const upgradeNotice = getUpgradeNotice(version);
+const updateNotice = getUpdateNotification(version);
+if (upgradeNotice) process.stderr.write(upgradeNotice);
+if (updateNotice) process.stderr.write(updateNotice);
 
 const program = new Command();
 
 program
   .name('vike')
   .description('AI-agent CLI for vike.io on-chain analytics')
-  .version(readPackageVersion(), '-v, --version', 'Show CLI version');
+  .version(version, '-v, --version', 'Show CLI version');
 
 registerLogin(program);
 registerLogout(program);
@@ -38,7 +52,12 @@ registerPolymarket(program);
 registerLabels(program);
 registerWeb(program);
 
-program.parseAsync(process.argv).catch((err) => {
-  console.error(`vike: ${err.message ?? err}`);
-  process.exitCode = 1;
-});
+program.parseAsync(process.argv)
+  .catch((err) => {
+    console.error(`vike: ${err.message ?? err}`);
+    process.exitCode = 1;
+  })
+  .finally(() => {
+    // Fire-and-forget background check, detached subprocess. Survives our exit.
+    scheduleUpdateCheck();
+  });
