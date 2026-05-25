@@ -21,6 +21,7 @@ import {
   getUpgradeNotice,
   scheduleUpdateCheck,
 } from './update-check.js';
+import { trackCommandSucceeded, trackCommandFailed } from './telemetry.js';
 
 const version = readPackageVersion();
 
@@ -38,6 +39,19 @@ program
   .description('AI-agent CLI for vike.io on-chain analytics')
   .version(version, '-v, --version', 'Show CLI version');
 
+// Telemetry: time each command from preAction to postAction; failure path is
+// caught below via parseAsync().catch().
+const _cmdStart = new WeakMap();
+program.hook('preAction', (_thisCmd, actionCmd) => {
+  _cmdStart.set(actionCmd, Date.now());
+});
+program.hook('postAction', (_thisCmd, actionCmd) => {
+  const t0 = _cmdStart.get(actionCmd);
+  trackCommandSucceeded(actionCmd.name(), actionCmd.opts(), {
+    durationMs: t0 ? Date.now() - t0 : null,
+  });
+});
+
 registerLogin(program);
 registerLogout(program);
 registerInit(program);
@@ -52,10 +66,16 @@ registerPolymarket(program);
 registerLabels(program);
 registerWeb(program);
 
+const _parseT0 = Date.now();
 program.parseAsync(process.argv)
   .catch((err) => {
     console.error(`vike: ${err.message ?? err}`);
     process.exitCode = 1;
+    const cmd = program.args[0] || 'unknown';
+    trackCommandFailed(cmd, {}, {
+      errorCode: err?.code || err?.name || 'error',
+      durationMs: Date.now() - _parseT0,
+    });
   })
   .finally(() => {
     // Fire-and-forget background check, detached subprocess. Survives our exit.

@@ -1,4 +1,4 @@
-// Anonymous, opt-out telemetry skeleton.
+// Anonymous, opt-out telemetry.
 //
 // Design decisions:
 // - Honors DO_NOT_TRACK=1 (industry standard) AND VIKE_NO_TELEMETRY=1
@@ -7,25 +7,24 @@
 // - Rolling 30-min session ID — same session_id within a 30-min window
 // - AbortController + 1000ms timeout, timer.unref() so we can't keep
 //   the process alive
-// - Payload includes: flag NAMES (no values), latency, success/error_code,
-//   chain (if relevant). NEVER the actual data the user queried.
+// - Payload includes: flag NAMES (no values), latency, success/error_code.
+//   NEVER the actual data the user queried (no addresses, no symbols).
 // - Fire-and-forget: errors are swallowed
-//
-// THE SINK IS NOT YET WIRED. `_send()` is a no-op until we have an
-// endpoint. Keeping the API shape stable now so we can flip the switch
-// later without a refactor.
 
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { homedir } from 'node:os';
 import { join } from 'node:path';
 import { randomUUID } from 'node:crypto';
+import { readPackageVersion } from './util.js';
 
 const CONFIG_DIR = join(homedir(), '.vike');
 const ID_FILE = join(CONFIG_DIR, 'telemetry-id');
 const SESSION_FILE = join(CONFIG_DIR, 'session');
 const SESSION_TTL_MS = 30 * 60 * 1000;
-const ENDPOINT = process.env.VIKE_TELEMETRY_ENDPOINT || '';
+const ENDPOINT = process.env.VIKE_TELEMETRY_ENDPOINT
+  || 'https://vike.io/api/cli-telemetry';
 const REQUEST_TIMEOUT_MS = 1000;
+const CLI_VERSION = (() => { try { return readPackageVersion(); } catch { return ''; } })();
 
 function disabled() {
   return process.env.DO_NOT_TRACK === '1' ||
@@ -82,9 +81,13 @@ function _send(event, payload) {
   if (typeof timer.unref === 'function') timer.unref();
   fetch(ENDPOINT, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      'User-Agent': `vike-cli/${CLI_VERSION}`,
+    },
     body: JSON.stringify({
       event,
+      cli_version: CLI_VERSION,
       device_id: getDeviceId(),
       session_id: getSessionId(),
       ts: Date.now(),
@@ -98,8 +101,11 @@ function _send(event, payload) {
 
 function flagNames(opts) {
   // Extract flag names from a commander options object. Values stripped.
+  // Convert camelCase to kebab-case for readability in analytics.
   if (!opts || typeof opts !== 'object') return [];
-  return Object.keys(opts).filter((k) => !k.startsWith('_') && k !== 'parent');
+  return Object.keys(opts)
+    .filter((k) => !k.startsWith('_') && k !== 'parent')
+    .map((k) => '--' + k.replace(/[A-Z]/g, (m) => '-' + m.toLowerCase()));
 }
 
 export function trackCommandSucceeded(command, opts, { durationMs } = {}) {
