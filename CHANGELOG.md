@@ -2,6 +2,17 @@
 
 All notable changes are documented here. Entries follow [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## Unreleased
+
+- **Root-level `SKILL.md`** — single agent-discoverable entry point covering all 34 MCP tools, auth flow, intent → tool routing table, and per-service tool reference. Ships in the npm package so installing `@vike-io/cli` also installs the skill. Existing per-tool playbooks under `skills/` are unchanged and cross-linked from the root.
+- **GH releases now created automatically** on `v*` tag push (release.yml). Previously every tag from v0.5.0 onward was published to npm but never created a corresponding github.com/vike-io/vike-cli/releases entry.
+
+## 0.7.2 — telemetry wired
+
+- **Telemetry skeleton turned on**: Commander `preAction`/`postAction` hooks emit `command_succeeded` (with command name, kebab-cased flag names, duration_ms, cli_version); `parseAsync().catch` emits `command_failed`. Default endpoint is `https://vike.io/api/cli-telemetry`. Honors `DO_NOT_TRACK=1` / `VIKE_NO_TELEMETRY=1` / `CI` / `NODE_ENV=test`.
+- **Lint cleanup**: dropped 4 stale unused-vars in `src/telemetry.js` and `src/update-check.js` (the cause of red CI on 0.7.0 + 0.7.1).
+- **Dependency bumps** (via Dependabot, all green): `commander ^14`, `eslint ^10`, `vitest ^4`, `actions/checkout v6`, `actions/setup-node v6`.
+
 ## 0.7.1 — eval harness v2 + help tweaks + SQL fix
 
 - **Eval schema upgraded** (`evals/questions.yaml`): multi-command list, per-skill tag, multi-step flag, word-boundary forbidden matching. Per-skill scoring breakdown + single-vs-multi-step split in the runner output.
