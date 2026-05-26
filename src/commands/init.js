@@ -15,7 +15,7 @@ export function registerInit(program) {
       if (!key) {
         const rl = createInterface({ input: stdin, output: stdout });
         try {
-          console.log('Get your API key at https://vike.io/api/keys');
+          console.log('Get your API key at https://vike.io/account?tab=api-keys');
           key = (await rl.question('Paste your API key (vk_...): ')).trim();
         } finally {
           rl.close();

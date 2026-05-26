@@ -22,14 +22,17 @@ const BEGIN = '<!-- vike-skill:begin -->';
 const END = '<!-- vike-skill:end -->';
 
 function readSkillSource() {
-  // SKILL.md ships at the root of the npm package, two levels up from
-  // src/commands/install.js.
+  // Umbrella SKILL.md lives at skills/vike/SKILL.md (moved from the repo
+  // root so the skills-CLI auto-discovers all 40 nested skills instead of
+  // stopping at the root one). Fallback to the old root path keeps older
+  // installs working until they upgrade.
   const here = fileURLToPath(import.meta.url);
-  const candidate = resolve(dirname(here), '..', '..', 'SKILL.md');
-  if (!existsSync(candidate)) {
-    throw new Error(`SKILL.md not found at ${candidate}. Reinstall @vike-io/cli.`);
+  const root = resolve(dirname(here), '..', '..');
+  for (const rel of ['skills/vike/SKILL.md', 'SKILL.md']) {
+    const candidate = resolve(root, rel);
+    if (existsSync(candidate)) return readFileSync(candidate, 'utf8');
   }
-  return readFileSync(candidate, 'utf8');
+  throw new Error(`SKILL.md not found under ${root}. Reinstall @vike-io/cli.`);
 }
 
 function writeStandalone(path, skill) {

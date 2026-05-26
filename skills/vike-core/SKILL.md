@@ -32,7 +32,7 @@ vike login --api-key vk_...        # non-interactive
 export VIKE_API_KEY=vk_...         # env (wins over saved config)
 ```
 
-Get an API key at https://vike.io/api/keys
+Get an API key at https://vike.io/account?tab=api-keys
 
 ## Verify
 

@@ -3,7 +3,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "version": "0.8.0",
+  "version": "0.8.1",
   "description": "AI-agent CLI for vike.io on-chain analytics, perps, options, and prediction markets across 11 chains",
   "type": "module",
   "main": "src/index.js",
@@ -14,7 +14,7 @@
     "src/**/*.js",
     "scripts/postinstall.js",
     "skills/**",
-    "SKILL.md",
+    "skills.sh.json",
     "CHANGELOG.md"
   ],
   "scripts": {

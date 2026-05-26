@@ -48,7 +48,7 @@ export function requireApiKey() {
   if (!key) {
     throw new Error(
       'No API key. Run `vike login --api-key <key>` or set VIKE_API_KEY. ' +
-      'Get a key at https://vike.io/api/keys',
+      'Get a key at https://vike.io/account?tab=api-keys',
     );
   }
   return key;

@@ -5,13 +5,26 @@
 [![npm version](https://img.shields.io/npm/v/@vike-io/cli.svg)](https://www.npmjs.com/package/@vike-io/cli)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Node](https://img.shields.io/badge/node-%3E%3D20-brightgreen.svg)](https://nodejs.org)
+[![skills.sh](https://skills.sh/b/vike-io/vike-cli)](https://skills.sh/vike-io/vike-cli)
 
 > **Command-line interface for the [vike.io](https://vike.io) API.** On-chain analytics, perpetuals, options flow, and prediction-market data across 11 chains — designed to be driven by AI agents (Claude Code, OpenClaw) as well as humans.
 
 ## Install
 
 ```bash
+# Standard install — gives you the `vike` binary
 npm install -g @vike-io/cli
+
+# OR install just the skill playbooks into your AI agent (Claude Code, Cursor,
+# Codex, Copilot, OpenCode and 50+ more — auto-detected):
+npx skills add vike-io/vike-cli
+```
+
+After `npm install`, you can also drop the skill into AI agents from the CLI itself:
+
+```bash
+vike install --all          # writes to ~/.claude/skills/vike/, .cursorrules,
+                            # .github/copilot-instructions.md, AGENTS.md
 ```
 
 ## Quick start
@@ -22,7 +35,7 @@ vike doctor                    # confirm everything works
 vike token search BTC          # your first query
 ```
 
-Get an API key at [vike.io/api/keys](https://vike.io/api/keys).
+Get an API key at [vike.io/account?tab=api-keys](https://vike.io/account?tab=api-keys).
 
 ## Commands at a glance
 
@@ -50,15 +63,24 @@ Run `vike schema --pretty` for the full command + flag reference.
 
 ## For AI agents
 
-This package ships **skill playbooks** under [`skills/`](skills/) — markdown files designed to be loaded by AI coding agents (Claude Code, OpenClaw, Cursor) so they know when and how to invoke each command.
+This package ships **41 skill playbooks** under [`skills/`](skills/) — markdown files designed to be loaded by AI coding agents (Claude Code, Cursor, Codex, Copilot, OpenCode, …) so they know when and how to invoke each command. They are grouped in [`skills.sh.json`](skills.sh.json) by domain (Tokens / Wallets / CEX perps / Hyperliquid / Options / Polymarket / Alerts / Web research).
 
-Skill entry points:
-- `vike-core` — install + auth + conventions (read first)
-- `vike-router` — decide which skill applies
-- `vike-token-research`, `vike-smart-money-discovery`, `vike-perp-funding-arb`, `vike-perp-screener`, `vike-hl-top-traders`, `vike-hl-trader-profile`, `vike-cross-venue-perps`, `vike-options-flow`, `vike-alerts-setup` — task playbooks
-- Per-tool skills for each command
+Three install paths, pick whichever fits your stack:
 
-In Claude Code, the bundled skills are auto-discovered after `npm install -g @vike-io/cli`. In other harnesses, point the agent at the `skills/` folder of this package.
+```bash
+# 1. Install just the skill files for your agent (no Node binary needed):
+npx skills add vike-io/vike-cli                # auto-detects the agent
+npx skills add vike-io/vike-cli -a claude-code # explicit target
+npx skills add vike-io/vike-cli --list          # list all 41 first
+
+# 2. Use the CLI itself to install the umbrella skill into multiple agents:
+vike install --claude --cursor --copilot --agents
+
+# 3. Manual: point your agent at the skills/ folder of this npm package
+#    (lives at node_modules/@vike-io/cli/skills/ after install).
+```
+
+Entry-point skill: `vike` (the umbrella) — auto-routes the user's question to the right specialized skill below. Bypass it and pick a specialized one if you know exactly which you need (e.g. `vike-hl-position-match` for reverse-lookup of an HL share card).
 
 ## Auth
 

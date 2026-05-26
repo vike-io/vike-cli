@@ -47,7 +47,7 @@ If the user has no API key yet, tell them:
 
 > **To use vike, you'll need a free API key:**
 >
-> 1. Visit https://vike.io/api/keys?utm_source=skill&utm_medium=ai&utm_campaign=cli_skill, sign in, and copy a key (starts with `vk_`).
+> 1. Visit https://vike.io/account?tab=api-keys&utm_source=skill&utm_medium=ai&utm_campaign=cli_skill, sign in, and copy a key (starts with `vk_`).
 > 2. Save it: `vike login --api-key vk_...` (or `export VIKE_API_KEY=vk_...`).
 > 3. Verify: `vike doctor`.
 >

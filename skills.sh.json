@@ -1,0 +1,101 @@
+{
+  "$schema": "https://skills.sh/schemas/skills.sh.schema.json",
+  "notGrouped": "bottom",
+  "groupings": [
+    {
+      "title": "Quick start",
+      "description": "Start here. The umbrella skill auto-routes user questions to the right specialized skill below.",
+      "skills": [
+        "vike",
+        "vike-router",
+        "vike-core"
+      ]
+    },
+    {
+      "title": "Tokens",
+      "description": "Resolve, screen, and research tokens across 11 chains. Smart-money inflow, holders, recent transfers, OHLCV.",
+      "skills": [
+        "vike-token-search",
+        "vike-token-research",
+        "vike-token-transfers",
+        "vike-token-holders",
+        "vike-token-screener",
+        "vike-smart-money-discovery"
+      ]
+    },
+    {
+      "title": "Wallets",
+      "description": "Per-wallet profile, PnL, counterparty graphs, ENS, batch labelling, fund affiliation, DeFi positions.",
+      "skills": [
+        "vike-wallet-summary",
+        "vike-wallet-portfolio",
+        "vike-wallet-discover",
+        "vike-wallet-transactions",
+        "vike-wallet-counterparties",
+        "vike-wallet-trace",
+        "vike-wallet-compare",
+        "vike-wallet-batch",
+        "vike-wallet-pnl-history",
+        "vike-wallet-balances",
+        "vike-wallet-ens",
+        "vike-wallet-label-provenance",
+        "vike-fund-holdings",
+        "vike-defi-positions"
+      ]
+    },
+    {
+      "title": "CEX perps",
+      "description": "Funding-rate arb + cross-venue mark-price spreads across Binance, Bybit, OKX, Aster, Hyperliquid.",
+      "skills": [
+        "vike-perp-funding-arb",
+        "vike-perp-spread-arb",
+        "vike-perp-screener",
+        "vike-cross-venue-perps"
+      ]
+    },
+    {
+      "title": "Hyperliquid perps",
+      "description": "Deep on-chain HL coverage: top traders, full trader profiles, and share-card reverse-lookup.",
+      "skills": [
+        "vike-hl-top-traders",
+        "vike-hl-trader-profile",
+        "vike-hl-position-match"
+      ]
+    },
+    {
+      "title": "Options",
+      "description": "Deribit BTC/ETH options flow + put-call ratios.",
+      "skills": [
+        "vike-options-flow"
+      ]
+    },
+    {
+      "title": "Polymarket",
+      "description": "Prediction-market discovery, single-market deep-dives, trader profiles, and smart-money leaderboards.",
+      "skills": [
+        "vike-polymarket-markets",
+        "vike-polymarket-market-detail",
+        "vike-polymarket-trader",
+        "vike-polymarket-smart-money",
+        "vike-polymarket-screener"
+      ]
+    },
+    {
+      "title": "Alerts",
+      "description": "Create, list, edit, delete price + flow alerts; register HTTPS webhooks with HMAC delivery.",
+      "skills": [
+        "vike-alerts-setup",
+        "vike-alerts-webhook"
+      ]
+    },
+    {
+      "title": "Web research",
+      "description": "Off-chain context: general web search and AI-summarized URL fetch for news, docs, and social.",
+      "skills": [
+        "vike-web-search",
+        "vike-web-fetch",
+        "vike-web-research"
+      ]
+    }
+  ]
+}

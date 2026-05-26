@@ -8,7 +8,7 @@ export function registerLogin(program) {
     .option('--api-key <key>', 'API key (vk_...)')
     .action(async (opts) => {
       if (!opts.apiKey) {
-        console.error('Pass --api-key <vk_...>. Get a key at https://vike.io/api/keys');
+        console.error('Pass --api-key <vk_...>. Get a key at https://vike.io/account?tab=api-keys');
         process.exitCode = 1;
         return;
       }
