@@ -12,6 +12,21 @@ Answer on-chain questions using the vike.io platform: 11 chains (ETH, BSC, Base,
 
 ---
 
+## Critical Rules
+
+Hard rules — agents that violate these produce wrong answers. Read once, apply always.
+
+1. **Addresses are always full 0x-hex (42 chars).** Never truncate when querying. Never display truncated when the user asks for the address — they'll copy-paste it.
+2. **Symbols are case-insensitive in queries, but display as the user typed.** `btc` and `BTC` both resolve; echo back what they wrote.
+3. **Time windows are UTC, day-boundaries cut at 00:00 UTC.** "Today" = since 00:00 UTC today, not local-time today.
+4. **Default page size is 50, max 500.** Don't request `--limit 10000` to "get everything" — paginate or use a screener tool instead.
+5. **Refresh cadence varies by tool.** Wallet PnL, HL positions: ≤2 min. Transfer-derived metrics: 5 min. Token price history: 1 min. Always assume <5 min unless a tool says otherwise.
+6. **USD amounts are floats in dollars.** `--min-usd 10000` = ten thousand dollars, not micro-USD.
+7. **`--json` flag is always available** on CLI commands and gives stable machine-readable output. Default (human) format may change; `--json` will not.
+8. **Resolve a token before asking transfer/holder questions.** `token_search` → take the canonical address → pass to `token_transfers` / `token_holders`. Symbol-only queries lose precision on tickers that collide across chains (e.g. FUN, BEAM, USDC).
+
+---
+
 ## Step 1: Confirm Authentication
 
 Follow this decision tree **before every session**. Do not skip to Step 2 until auth is confirmed.
@@ -32,7 +47,7 @@ If the user has no API key yet, tell them:
 
 > **To use vike, you'll need a free API key:**
 >
-> 1. Visit https://vike.io/api/keys, sign in, and copy a key (starts with `vk_`).
+> 1. Visit https://vike.io/api/keys?utm_source=skill&utm_medium=ai&utm_campaign=cli_skill, sign in, and copy a key (starts with `vk_`).
 > 2. Save it: `vike login --api-key vk_...` (or `export VIKE_API_KEY=vk_...`).
 > 3. Verify: `vike doctor`.
 >
@@ -257,6 +272,67 @@ General web search + AI-summarized fetch for off-chain context (news, docs, soci
 |---|---|---|
 | `web_search` | Tavily-primary + Serper fallback web search | [vike-web-search](skills/vike-web-search/SKILL.md) |
 | `web_fetch` | Fetch a URL + AI Q&A over its contents (Cerebras-backed) | [vike-web-fetch](skills/vike-web-fetch/SKILL.md), [vike-web-research](skills/vike-web-research/SKILL.md) |
+
+---
+
+## Historical data availability
+
+Coverage windows per dataset. Don't ask for data older than the window — the tool will return empty or 503.
+
+### Transfers & on-chain (per chain)
+
+| Chain | Earliest block / date | Notes |
+|---|---|---|
+| Ethereum | 2018-01 (block ~4.85M) | Full history; ETH + ERC-20 |
+| BSC | 2021-01 | Full history; BNB + BEP-20 |
+| Base | 2023-08 (chain launch) | Full history |
+| Arbitrum | 2024-Q3 onward | Backfill in progress; pre-2024 sparse |
+| HyperEVM | 2025-Q1 (chain launch) | Full history |
+| Bitcoin | 2024-01 | Recent windows only — full-history backfill not active |
+| Solana | 2026-Q1 onward | Recent only — see `vike-cli` chain-coverage notes |
+| Tron/XMR/ZEC/Dash | 2024 onward | Recent only |
+
+### Prices (data_history, spot)
+
+| Venue | Earliest | Notes |
+|---|---|---|
+| Binance | 2017-08 | Full minute-level OHLCV |
+| Bybit | 2020-03 | Full minute-level OHLCV |
+| OKX | 2019-04 | Full minute-level OHLCV |
+| Gate | 2017 (CSV) → 2024-05 (CSV ends) | After 2024-05 use API; capped 10k minutes/request |
+| Coinbase | 2015 | Full history (recently added) |
+| KuCoin | 2018 | Full history (recently added) |
+| Pyth | 2023 | On-chain price feed; sparse pre-2023 |
+| Deribit options | 2020 onward | BTC + ETH only |
+
+### Hyperliquid perps (hl_perps DB)
+
+| Dataset | Window | Notes |
+|---|---|---|
+| Snapshots (positions / equity) | 30 days | TTL — older snapshots dropped |
+| Fills | 30 days | TTL |
+| Ledger (deposits/withdrawals) | 30 days | TTL |
+| Funding payments | 90 days | API-backed since 2026-04-22 |
+| Daily attributed PnL | All-time | `wallet_pnl_attributed_daily` is the long-history view |
+| Daily flows | All-time | `wallet_flows_daily` |
+| Top-trader leaderboards | rolling 24h / 7d / 30d | derived on-the-fly |
+
+### CEX perps (data_perp DB)
+
+| Dataset | Window |
+|---|---|
+| `tickers_1m` (ticker snapshots) | rolling 24h |
+| Funding rates | 90 days |
+| Trades (ws_trades) | rolling 7-30 days per venue |
+
+### Polymarket
+
+| Dataset | Window | Notes |
+|---|---|---|
+| Active markets | live | scraper paused 2026-05-24 (CF block); historical snapshots still queryable |
+| Wallet positions | last known snapshot | not real-time until scraper resumes |
+
+If your query needs older data than what's listed: say so clearly and offer the nearest in-range window. Don't silently return empty.
 
 ---
 
