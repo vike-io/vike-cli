@@ -14,6 +14,7 @@
     "src/**/*.js",
     "scripts/postinstall.js",
     "skills/**",
+    "SKILL.md",
     "CHANGELOG.md"
   ],
   "scripts": {
