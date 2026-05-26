@@ -32,6 +32,30 @@ export function registerPerp(program) {
     });
 
   cmd
+    .command('find-position')
+    .description('Reverse-lookup HL open positions matching a share-card (coin/side/lev/entry)')
+    .requiredOption('--coin <s>', 'Asset symbol (e.g. BTC, ETH)')
+    .requiredOption('--side <s>', 'long | short')
+    .requiredOption('--leverage <x>', 'Leverage from the share card (e.g. 25)')
+    .requiredOption('--entry <p>', 'Entry price from the share card')
+    .option('--mark <p>', 'Optional current mark price (sharpens tie-break)')
+    .option('--limit <n>', 'Max matches (default 10, max 50)', '10')
+    .option('--json', 'Emit JSON')
+    .action(async (opts) => {
+      try {
+        const r = await callTool('hl_position_match', {
+          coin: opts.coin,
+          side: opts.side,
+          leverage: Number(opts.leverage),
+          entry_price: Number(opts.entry),
+          mark_price: opts.mark != null ? Number(opts.mark) : undefined,
+          limit: parseInt10(opts.limit, 10),
+        });
+        emit(r, opts);
+      } catch (err) { emitError(err, opts); }
+    });
+
+  cmd
     .command('top-traders')
     .description('Top Hyperliquid perp wallets by PnL / ROI / win rate / volume')
     .option('--window <w>', '1d | 7d | 30d | all', '30d')

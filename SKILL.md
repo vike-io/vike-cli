@@ -83,6 +83,7 @@ X-API-KEY: vk_...
 | Funding rates across CEX perps (Binance/Bybit/OKX/Aster/HL) | **CEX Perps** | `vike perp funding` / `perp_funding` |
 | Price spreads of same symbol across CEX perp venues | **CEX Perps** | `vike perp spreads` / `perp_spreads` |
 | Top Hyperliquid perp traders by PnL / volume | **HL Perps** | `vike perp top-traders` / `hl_perp_top_traders` |
+| Reverse-lookup an HL share card → which wallet holds it | **HL Perps** | `vike perp find-position` / `hl_position_match` |
 | Deribit options flow, put/call ratios, IV | **Options** | `vike options flow` / `options_flow` |
 | Active Polymarket markets, volume, odds | **Polymarket** | `vike polymarket markets` / `polymarket_markets` |
 | Single Polymarket market detail | **Polymarket** | `vike polymarket detail` / `polymarket_market_detail` |
@@ -210,6 +211,7 @@ On-chain perps data: snapshots, fills, ledger, funding, attribution.
 | Tool | Description | Skill |
 |---|---|---|
 | `hl_perp_top_traders` | Top HL traders by PnL/volume over a window | [vike-hl-top-traders](skills/vike-hl-top-traders/SKILL.md), [vike-hl-trader-profile](skills/vike-hl-trader-profile/SKILL.md) |
+| `hl_position_match` | Reverse-lookup: share-card details (coin/side/lev/entry) → wallet holding that open position | [vike-hl-position-match](skills/vike-hl-position-match/SKILL.md) |
 
 For per-symbol HL screening / individual trader deep-dive, use [vike-perp-screener](skills/vike-perp-screener/SKILL.md) and [vike-hl-trader-profile](skills/vike-hl-trader-profile/SKILL.md).
 

@@ -16,7 +16,7 @@ const EXPECTED_SUBCMDS = {
   token: ['search', 'transfers', 'chart', 'holders'],
   wallet: ['summary', 'discover', 'ens',
            'counterparties', 'pnl-history', 'balances'],
-  perp: ['funding', 'spreads', 'top-traders'],
+  perp: ['funding', 'spreads', 'top-traders', 'find-position'],
   options: ['flow'],
   alerts: ['list', 'channels', 'create', 'edit', 'delete', 'register-webhook'],
   polymarket: ['markets', 'market', 'wallet', 'smart-money'],

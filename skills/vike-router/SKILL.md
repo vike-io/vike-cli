@@ -22,6 +22,7 @@ Route the user's question to the right `vike-*` skill.
 | Perp funding rates / arb opportunities | `vike-perp-funding-arb` |
 | Cross-venue perp price spreads | `vike-perp-spread-arb` |
 | Top Hyperliquid perp traders | `vike-hl-top-traders` |
+| Match an HL share card → wallet (reverse-lookup) | `vike-hl-position-match` |
 | Profile a single HL perp trader | `vike-hl-trader-profile` |
 | HL market overview (vol/OI/funding) | `vike-perp-screener` |
 | Compare a symbol across all perp venues | `vike-cross-venue-perps` |

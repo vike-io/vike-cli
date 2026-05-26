@@ -2,6 +2,13 @@
 
 All notable changes are documented here. Entries follow [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## 0.8.0 — HL share-card reverse-lookup + multi-IDE installer + SKILL.md hardening
+
+- **`vike perp find-position`** (new command, alias for the new `hl_position_match` MCP tool). Reverse-lookup a Hyperliquid open position from share-card details: paste `coin + side + leverage + entry` and get the wallet(s) holding a matching open position back. Walks widening entry tolerance bands (tight 0.05% → loose 0.5% → fallback 1.0%) with leverage tolerance ±0.5; tie-break by closest mark price. Returns `tolerance_used` so callers can flag low-confidence matches. Backed by `position_snapshots_latest` — near-real-time, no new schema.
+- **`vike install`** (new command). One-shot multi-IDE skill drop: `--claude` writes `~/.claude/skills/vike/SKILL.md`; `--cursor` / `--copilot` / `--agents` update marker-fenced blocks in `.cursorrules` / `.github/copilot-instructions.md` / `AGENTS.md` (idempotent — re-running replaces the block, never clobbers surrounding user content). `--all` writes every target at once.
+- **Root `SKILL.md` hardening**: added a "Critical Rules" block (8 hard rules agents most often violate), per-service "Historical Data Availability" tables (transfers per chain, prices per venue, HL perps, CEX perps, Polymarket — so agents stop over-promising data we don't have), and UTM-tagged signup links for attribution.
+- New skill playbook: `vike-hl-position-match`. Total: 40 skills (was 39), 35 MCP tools (was 34).
+
 ## 0.7.3 — agent-discoverable SKILL.md + auto GH releases
 
 - **Root-level `SKILL.md`** — single agent-discoverable entry point covering all 34 MCP tools, auth flow, intent → tool routing table, and per-service tool reference. Ships in the npm package so installing `@vike-io/cli` also installs the skill. Existing per-tool playbooks under `skills/` are unchanged and cross-linked from the root.
