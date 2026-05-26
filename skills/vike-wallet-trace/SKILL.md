@@ -68,6 +68,16 @@ Tool credits = 4 per call (heavier than other graph-less tools). Graph explodes 
 - Don't depth-5 by default. Graph blows up; results become noise.
 - Don't ignore `min_usd` — without it, dust transfers create false-positive edges.
 
+## Visual graph (web UI)
+
+When the user wants to *see* the network rather than read JSON, surface the URL:
+
+```
+https://vike.io/spot/wallet/<address>
+```
+
+Tell them to click the **Graph** tab. It renders the same trace data as a force-directed graph (nodes coloured by hop depth, sized by USD volume, animated directional particles on edges). Clicking any non-root node navigates to that wallet's graph. Use this in chat replies when the user says "show me", "visualize", or pastes a wallet address asking for an exploration view — JSON is for downstream pipelines, the URL is for humans.
+
 ## Pairs well with
 
 - `vike labels <addr>` — identify any interesting node
