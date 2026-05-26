@@ -12,6 +12,7 @@ import { registerWeb } from './commands/web.js';
 // commands. New wallet subcommands (counterparties, pnl-history, balances,
 // ens) are added under registerWallet.
 import { registerInit } from './commands/init.js';
+import { registerInstall } from './commands/install.js';
 import { registerDoctor } from './commands/doctor.js';
 import { registerSchema } from './commands/schema.js';
 import { registerLogin, registerLogout } from './commands/auth.js';
@@ -55,6 +56,7 @@ program.hook('postAction', (_thisCmd, actionCmd) => {
 registerLogin(program);
 registerLogout(program);
 registerInit(program);
+registerInstall(program);
 registerDoctor(program);
 registerSchema(program);
 registerToken(program);

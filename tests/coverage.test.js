@@ -9,7 +9,7 @@ import { describe, it, expect } from 'vitest';
 const EXPECTED_TOP_LEVEL = [
   'token', 'wallet', 'perp', 'options', 'alerts',
   'polymarket', 'web', 'labels', 'funds', 'defi',
-  'init', 'doctor', 'schema', 'login', 'logout',
+  'init', 'install', 'doctor', 'schema', 'login', 'logout',
 ];
 
 const EXPECTED_SUBCMDS = {
@@ -66,6 +66,7 @@ async function loadAllRegisters() {
     registerLabels: (await import('../src/commands/labels.js')).registerLabels,
     registerWeb: (await import('../src/commands/web.js')).registerWeb,
     registerInit: (await import('../src/commands/init.js')).registerInit,
+    registerInstall: (await import('../src/commands/install.js')).registerInstall,
     registerDoctor: (await import('../src/commands/doctor.js')).registerDoctor,
     registerSchema: (await import('../src/commands/schema.js')).registerSchema,
     registerLogin: (await import('../src/commands/auth.js')).registerLogin,
