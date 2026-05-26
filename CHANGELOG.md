@@ -2,7 +2,7 @@
 
 All notable changes are documented here. Entries follow [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
-## Unreleased
+## 0.7.3 — agent-discoverable SKILL.md + auto GH releases
 
 - **Root-level `SKILL.md`** — single agent-discoverable entry point covering all 34 MCP tools, auth flow, intent → tool routing table, and per-service tool reference. Ships in the npm package so installing `@vike-io/cli` also installs the skill. Existing per-tool playbooks under `skills/` are unchanged and cross-linked from the root.
 - **GH releases now created automatically** on `v*` tag push (release.yml). Previously every tag from v0.5.0 onward was published to npm but never created a corresponding github.com/vike-io/vike-cli/releases entry.
