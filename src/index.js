@@ -8,6 +8,7 @@ import { registerAlerts } from './commands/alerts.js';
 import { registerPolymarket } from './commands/polymarket.js';
 import { registerLabels } from './commands/labels.js';
 import { registerWeb } from './commands/web.js';
+import { registerOhlcv } from './commands/ohlcv.js';
 // Note: registerLabels also registers `vike funds` and `vike defi` top-level
 // commands. New wallet subcommands (counterparties, pnl-history, balances,
 // ens) are added under registerWallet.
@@ -67,6 +68,7 @@ registerAlerts(program);
 registerPolymarket(program);
 registerLabels(program);
 registerWeb(program);
+registerOhlcv(program);
 
 const _parseT0 = Date.now();
 program.parseAsync(process.argv)

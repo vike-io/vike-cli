@@ -17,6 +17,7 @@
       "skills": [
         "vike-token-search",
         "vike-token-research",
+        "vike-ohlcv",
         "vike-token-transfers",
         "vike-token-holders",
         "vike-token-screener",

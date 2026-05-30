@@ -30,6 +30,7 @@ describe('cli --help', () => {
     ['alerts'],
     ['polymarket'],
     ['web'],
+    ['ohlcv', 'BTC'],
     ['init'],
     ['doctor'],
     ['schema'],

@@ -41,6 +41,7 @@ Get an API key at [vike.io/account?tab=api-keys](https://vike.io/account?tab=api
 
 ```
 vike token   search | transfers | chart
+vike ohlcv   <symbol>          # CEX candles, any timeframe (BTC, BTCUSDT)
 vike wallet  summary | discover
 vike perp    funding | spreads | top-traders
 vike options flow

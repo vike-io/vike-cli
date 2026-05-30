@@ -14,7 +14,8 @@ Route the user's question to the right `vike-*` skill.
 |---|---|
 | Token by symbol/name → address | `vike-token-search` |
 | Token holders / who bought / sold | `vike-token-transfers` |
-| Token price chart / OHLCV | `vike-token-research` |
+| Token price chart / DEX OHLCV by contract address | `vike-token-research` |
+| CEX candles by ticker/pair, any timeframe (BTC, BTCUSDT) | `vike-ohlcv` |
 | Generic token research (everything) | `vike-token-research` |
 | Single wallet's metrics | `vike-wallet-summary` |
 | Top wallets / leaderboard | `vike-wallet-discover` |
@@ -34,6 +35,7 @@ Route the user's question to the right `vike-*` skill.
 
 ```
 vike token   search | transfers | chart
+vike ohlcv   <symbol>          # CEX candles, any timeframe (BTC, BTCUSDT)
 vike wallet  summary | discover
 vike perp    funding | spreads | top-traders
 vike options flow

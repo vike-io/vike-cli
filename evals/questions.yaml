@@ -265,3 +265,130 @@ questions:
     forbidden: ["vike alert", "--type"]
     skill: vike-alerts-setup
     multi_step: true
+
+  # ─── Ambiguous questions (no pre-specified steps) — test skill guidance ─
+  - id: ambig-suspicious-transfer
+    q: "I just saw a $50M USDC transfer to a wallet created yesterday. Should I worry?"
+    expected_commands:
+      - "vike labels"
+      - "vike wallet trace"
+    expected_flags: ["--depth"]
+    forbidden: ["vike alert", "vike worry"]
+    skill: vike-wallet-trace
+    multi_step: true
+
+  - id: ambig-dormant-wallet-wakes
+    q: "This wallet hasn't moved in 2 years and just transferred 100k ETH out. What should I look at?"
+    expected_commands:
+      - "vike wallet summary"
+      - "vike wallet transactions"
+      - "vike labels"
+    expected_flags: ["--direction", "--days"]
+    forbidden: ["vike monitor"]
+    skill: vike-wallet-transactions
+    multi_step: true
+
+  - id: ambig-frontrunning-hunt
+    q: "Figure out who's been front-running my trades on Hyperliquid recently."
+    expected_commands:
+      - "vike perp top-traders"
+      - "vike wallet counterparties"
+    expected_flags: ["--window"]
+    forbidden: ["vike frontrun", "vike mempool"]
+    skill: vike-hl-trader-profile
+    multi_step: true
+
+  - id: ambig-pm-insider-signal
+    q: "Find me Polymarket markets where insiders are betting heavily against the consensus right now."
+    expected_commands:
+      - "vike polymarket smart-money"
+    expected_flags: ["--mode"]
+    forbidden: ["vike pm insiders", "vike polymarket insiders"]
+    skill: vike-polymarket-smart-money
+    multi_step: false
+
+  - id: ambig-cross-asset-rotation
+    q: "I want to see when smart money rotated from ETH into SOL over the last 30 days."
+    expected_commands:
+      - "vike token transfers"
+      - "vike token holders"
+    expected_flags: ["--chain", "--period"]
+    forbidden: ["vike rotation"]
+    skill: vike-token-research
+    multi_step: true
+
+  # ─── Trap questions — test anti-pattern avoidance ────────────────────
+  # Each trap has a "naive" answer (A likely picks) and a "skill-guided"
+  # answer (B picks because the skill warns about the pitfall).
+
+  - id: trap-cex-overlap-relatedness
+    q: "Are 0xabc... and 0xdef... controlled by the same person? They both deposit to Binance hot wallet 14."
+    expected_commands:
+      - "vike wallet compare"
+      - "vike labels"     # ← the skill says: label shared CPs before claiming relatedness
+    forbidden: ["vike wallet confirm-related", "vike check-ownership"]
+    skill: vike-wallet-compare
+    multi_step: true
+
+  - id: trap-pnl-history-as-pnl
+    q: "Get me the lifetime PnL of wallet 0xabc."
+    expected_commands:
+      - "vike wallet discover"        # ← right tool: --sort pnl --window all
+      - "vike wallet summary"          # ← OK alternative
+    expected_flags: ["--sort"]
+    forbidden: ["pnl-history --days all"]   # pnl-history is daily net flow, NOT realized PnL
+    skill: vike-wallet-pnl-history
+    multi_step: false
+
+  - id: trap-small-sample-winrate
+    q: "Show me Hyperliquid traders with 90%+ win rate so I can copy-trade them."
+    expected_commands:
+      - "vike perp top-traders"
+    expected_flags: ["--min-win-rate", "--min-trades"]   # ← skill warns: filter min-trades to avoid noise
+    forbidden: ["--size 100"]
+    skill: vike-hl-top-traders
+    multi_step: false
+
+  - id: trap-holders-vs-buyers
+    q: "Top 20 wallets accumulating PEPE right now."
+    expected_commands:
+      - "vike token transfers"   # ← recent BUYERS via --tab bought (skill emphasizes this)
+      - "vike token holders"     # ← acceptable alt (lifetime net inflow)
+    expected_flags: ["--tab", "--period"]
+    forbidden: ["--accumulators", "vike token accumulating"]
+    skill: vike-token-transfers
+    multi_step: false
+
+  - id: trap-defi-for-token-balances
+    q: "Get current ERC-20 token balances for 0xabc — what does the wallet hold right now?"
+    expected_commands:
+      - "vike wallet balances"   # ← the right tool
+    forbidden: ["vike defi"]      # ← defi gives PROTOCOL positions, not spot ERC-20 balances
+    skill: vike-wallet-balances
+    multi_step: false
+
+  # ─── Single-step: ohlcv (CEX historical candles / data download) ─────
+  - id: ohlcv-historical-candles
+    q: "Pull the last week of hourly BTC candles from Binance for a backtest."
+    expected_commands: ["vike ohlcv"]
+    expected_flags: ["--interval", "--exchange"]
+    forbidden: ["vike token chart", "vike chart", "--symbol"]   # symbol is positional, not a flag
+    skill: vike-ohlcv
+    multi_step: false
+
+  - id: ohlcv-perp-candles
+    q: "Give me 4-hour ETH perpetual candles, the most recent 200 bars."
+    expected_commands: ["vike ohlcv"]
+    expected_flags: ["--interval", "--market", "--limit"]
+    forbidden: ["vike perp ohlcv", "vike perp chart", "--symbol"]
+    skill: vike-ohlcv
+    multi_step: false
+
+  - id: trap-ohlcv-vs-token-chart
+    q: "Get the price candles for the token at 0x6982508145454ce325ddbe47a25d4ec3d2311933."
+    expected_commands:
+      - "vike token chart"        # ← DEX candles by contract address
+    expected_flags: ["--interval"]
+    forbidden: ["vike ohlcv"]     # ← ohlcv is by ticker/pair (BTC, BTCUSDT), not a contract address
+    skill: vike-token-research
+    multi_step: false

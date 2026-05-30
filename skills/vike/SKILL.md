@@ -66,7 +66,8 @@ X-API-KEY: vk_...
 |---|---|---|
 | Token by symbol/name → address, market cap, holders | **Tokens** | `vike token search` / `token_search` |
 | Token holders, who bought/sold, top inflows | **Tokens** | `vike token transfers` / `token_transfers` |
-| Token chart / OHLCV / historical price | **Tokens** | `vike token chart` / `token_chart` |
+| Token chart / DEX OHLCV by contract address | **Tokens** | `vike token chart` / `token_chart` |
+| CEX candles by ticker/pair, any timeframe (1m–1w), spot or perp | **Tokens** | `vike ohlcv <symbol>` / `ohlcv` |
 | Filter/screen tokens by smart-money flow, liquidity, age | **Tokens** | `vike token screener` / `token_screener` |
 | Single wallet's PnL, holdings, recent activity | **Wallets** | `vike wallet summary` / `wallet_summary` |
 | Top wallets by PnL on a token / leaderboard | **Wallets** | `vike wallet discover` / `wallet_discover` |
@@ -155,7 +156,8 @@ Address resolution, transfers, OHLCV, holder cohorts, screening.
 |---|---|---|
 | `token_search` | Symbol/name → contract address + chain + market cap | [vike-token-search](skills/vike-token-search/SKILL.md) |
 | `token_transfers` | Recent transfers with USD values; supports `--min-usd`, time windows | [vike-token-transfers](skills/vike-token-transfers/SKILL.md) |
-| `token_chart` | OHLCV from data_history (binance/bybit/okx/gate aggregate) | [vike-token-research](skills/vike-token-research/SKILL.md) |
+| `token_chart` | DEX OHLCV by contract address (5/30/120-min, data_history aggregate) | [vike-token-research](skills/vike-token-research/SKILL.md) |
+| `ohlcv` | CEX candles by ticker (BTC) or pair (BTCUSDT), 1m–1w, spot/perp, paged | [vike-ohlcv](skills/vike-ohlcv/SKILL.md) |
 | `token_holders` | Top holders + concentration metrics | [vike-token-holders](skills/vike-token-holders/SKILL.md) |
 | `token_screener` | Filter tokens by smart-money inflow, age, liquidity, sector | [vike-token-screener](skills/vike-token-screener/SKILL.md) |
 

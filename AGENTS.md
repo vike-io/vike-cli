@@ -23,6 +23,7 @@ src/
   commands/             # one file per command group
     auth.js             # login/logout/whoami
     token.js            # token search|transfers|chart
+    ohlcv.js            # ohlcv <symbol> (CEX candles, any timeframe)
     wallet.js           # wallet summary|discover
     perp.js             # perp funding|spreads|top-traders
     options.js          # options flow
