@@ -38,6 +38,7 @@ The script has inline `# /// script` dependencies — no separate venv needed.
 ## Configure
 
 - Set `ANTHROPIC_API_KEY` (or `OPENAI_API_KEY` for the OpenAI judge).
+- For the live e2e suite (`npm run test:e2e`), set `VIKE_API_KEY` — copy `.env.example` to `.env` and fill it in (auto-loaded; tests skip without it).
 - Add / edit questions in `questions.yaml`.
 - Each question lists: the user prompt, the expected command, expected flags, and forbidden fragments (common hallucinations).
 
