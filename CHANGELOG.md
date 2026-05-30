@@ -2,6 +2,12 @@
 
 All notable changes are documented here. Entries follow [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## 0.9.0 — `vike ohlcv` (CEX historical candles)
+
+- **`vike ohlcv <symbol>`** (new command, wraps the new `ohlcv` MCP tool). Historical CEX candles for a canonical ticker (`BTC`) or exchange pair (`BTCUSDT`) across any timeframe (1m–1w), spot or perp. Flags: `--interval`, `--exchange` (binance/bybit/okx/gate/kucoin/coinbase/mexc/pyth, or omit for the merged best-source series), `--market`, `--start`/`--end`, `--limit` (max 5000), and `--cursor` paging. Look-ahead-safe — the in-progress bucket is excluded. Distinct from `vike token chart`, which serves DEX candles by **contract address** at 5/30/120-min only.
+- **First live e2e test** (`tests/ohlcv.e2e.test.js`) hitting `vike.io/mcp`; `vitest.e2e.config.js` now auto-loads a gitignored `.env` for `VIKE_API_KEY` (real env vars still win). Coverage + `--help` tests updated.
+- New skill playbook `vike-ohlcv` (registered in `skills.sh.json`); routing/command maps updated across root `SKILL.md`, `vike-router`, `README`, and `AGENTS`. Eval questions added for historical-data fetch + an `ohlcv`-vs-`token chart` trap. Total: 41 skills (was 40), 36 MCP tools (was 35).
+
 ## 0.8.0 — HL share-card reverse-lookup + multi-IDE installer + SKILL.md hardening
 
 - **`vike perp find-position`** (new command, alias for the new `hl_position_match` MCP tool). Reverse-lookup a Hyperliquid open position from share-card details: paste `coin + side + leverage + entry` and get the wallet(s) holding a matching open position back. Walks widening entry tolerance bands (tight 0.05% → loose 0.5% → fallback 1.0%) with leverage tolerance ±0.5; tie-break by closest mark price. Returns `tolerance_used` so callers can flag low-confidence matches. Backed by `position_snapshots_latest` — near-real-time, no new schema.
@@ -43,22 +49,26 @@ Total: 38 skills (was 33), 34 MCP tools (was 29).
 Mostly internal-quality improvements; no new commands. Backbone for everything that follows.
 
 **New infra**
+
 - **Background update-check** — silent detached subprocess polls the registry once/day; next-run prints `Update available: X.Y.Z → A.B.C`. Honors `NO_UPDATE_NOTIFIER` / `CI` / `VIKE_NO_UPDATE_CHECK`.
 - **First-run-after-upgrade notice** — one-time `Updated to X.Y.Z` print.
 - **Telemetry skeleton** — anonymous UUID + 30-min session ID, fire-and-forget. NO sink endpoint wired yet (events drop silently); shape is stable so we can flip it on without refactoring. Opt-out via `DO_NOT_TRACK=1` or `VIKE_NO_TELEMETRY=1`.
 - **Centralized chain registry** (`src/chains.js`) — `ALL_CHAINS`, `EVM_CHAINS`, `WALLET_CHAINS`, `CHAIN_ALIASES`, `normaliseChain()`, `isEvmAddress()`.
 
 **Testing + release safety**
+
 - Two-tier vitest config — `npm test` (unit/integration, <30s) vs `npm run test:e2e` (live MCP, up to 2 min).
 - Four meta-tests added: shebang, pack-and-install (catches missing `files`), CLI help for every command, command coverage regression.
 - Pretest changeset validator — hard-fails on wrong package name in changeset frontmatter; warns on missing changeset.
 - Postinstall script hardened — global-install + TTY gates, always `exit 0`.
 
 **Skill quality evals (preview)**
+
 - `evals/` directory with a `uv run`-script harness: A/B-tests every question against `vike --help` only vs `vike --help + SKILL.md`. Scores per question; aggregates a Δ for each skill. If a skill doesn't move the score, it shouldn't ship. Run: `uv run --script evals/runner.py` (needs `ANTHROPIC_API_KEY`).
 - 14 starter questions in `evals/questions.yaml`.
 
 **Security**
+
 - `SECURITY.md` published (report at security@vike.io; 48h ack, 7d critical-fix SLA).
 - `CODEOWNERS` file (single-maintainer for now; security-sensitive paths called out).
 - Dependabot weekly PRs for npm + GitHub Actions deps.
